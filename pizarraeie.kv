@@ -1,0 +1,102 @@
+#:import C kivy.utils.get_color_from_hex
+
+<RadioButton>
+    background_normal: './IMAGES/color_button_normal.png'
+    background_down: './IMAGES/color_button_down.png'
+    border: (3, 3, 3, 3)
+
+<ColorButton@RadioButton>:
+    group: 'color'
+    on_release: app.canvas_widget.set_color(self.background_color)
+
+<LineWidthButton@RadioButton>:
+    group: 'line_width'
+    on_release: app.canvas_widget.set_line_width(self.text)
+    color: C('#2c3e50')
+    background_color: C('#ecf0f1')
+
+<CanvasWidget>:
+    Button:
+        #text: 'Borrar'
+        font_size: 20
+        on_release: root.clear_canvas()
+        background_normal: './IMAGES/trash.png'
+        background_down: './IMAGES/trash2.png'
+        border: (2, 2, 2, 2)
+        x:0
+        top: root.top - 500
+        width: 120
+        height: 80
+
+    Button:
+        #text: 'Guardar'
+        font_size: 20
+        on_release: root.guardar()
+        background_normal: './IMAGES/floppy.png'
+        background_down: './IMAGES/floppy2.png'
+        border: (2, 2, 2, 2)
+        x:0
+        top: root.top - 200
+        width: 120
+        height: 80
+        
+        
+    Button:
+        #text: 'Exportar'
+        font_size: 20
+        on_release: root.export()
+        background_normal: './IMAGES/pdf.png'
+        background_down: './IMAGES/pdf2.png'
+        border: (2, 2, 2, 2)
+        x:0
+        top: root.top - 350
+        width: 120
+        height: 80    
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 2
+        spacing: 2
+        x: 0
+        top: root.top
+        width: 80
+        height: 110
+
+        LineWidthButton:
+            text: 'Fino'
+
+        LineWidthButton:
+            text: 'Medio'
+            state: 'down'
+
+        LineWidthButton:
+            text: 'Grueso'
+
+    BoxLayout:
+        orientation: 'horizontal'
+        padding: 6
+        spacing: 6
+        x: 0
+        y: 0
+        width: 200
+        height: 50
+
+        ColorButton:
+            background_color: C('#190707')
+            state: 'down'
+
+        ColorButton:
+            background_color: C('#0404B4')
+
+        ColorButton:
+            background_color: C('#27ae60')
+
+        ColorButton:
+            background_color: C('#DF0101')
+        
+        ColorButton:
+			background_normal: './IMAGES/borrador.png'
+			background_down: './IMAGES/borrador3.png'
+            background_color: C('#FFFFFF')    
+
+        
