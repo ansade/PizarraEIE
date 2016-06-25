@@ -34,7 +34,7 @@ from kivy.graphics import (
 
 class CanvasWidget(Widget):
     line_width = 2 
-
+    # Dibuja el trazo
     def on_touch_down(self, touch):
         if Widget.on_touch_down(self, touch):
             return
@@ -70,7 +70,7 @@ class CanvasWidget(Widget):
             self.add_widget(widget)
         self.set_color(self.last_color)
 
-    
+    #Funcion que exporta a PNG
     def export_to_png(self, filename, *args):
       
 
@@ -97,22 +97,25 @@ class CanvasWidget(Widget):
 
         return True
     
-	
+	# Funcion que limpia los widgets y guarda una imagen de los apuntes
     def guardar(self):
-        global itername # variable que incrementa el numero de 
+        global itername # variable que incrementa el numero de img
+        #guarda los botones
         saved = self.children[:]
-         
+        #borra los botones 
         self.clear_widgets()
-    
+        # guarda el contenido de la pizarra (utiliza funcion exportar a PNG)
         self.export_to_png('IMG'+str(itername)+'.png')
-        
-        
         itername = itername + 1
         print itername
+        
+        #recupera los botones
         for widget in saved:
             self.add_widget(widget)
+        #recupera el color del trazo    
         self.set_color(self.last_color)
     
+    # Funcion que toma las imagenes guardadas y las exporta a pdf
     def export(self):
 		c = canvas.Canvas('./PDFs/EJEMPLO.pdf')
 		c.drawImage('./prueba.png', 0, 0, 22*cm, 22*cm) #HAcer un for que itere sobre todas las imagenes creadas
@@ -147,21 +150,10 @@ class PizarraEIEApp(App):
     def build(self):
         EventLoop.ensure_window()
 
-        self.canvas_widget = CanvasWidget() # Crea el widget 
+        self.canvas_widget = CanvasWidget() # Crea el ROOT widget 
         
-        self.canvas_widget.set_color(  # Pone color al trazo 
-        get_color_from_hex('#190707'))
-        
-        
-       # c = canvas.Canvas('EJEMPLO.pdf')
-	
-	
-	#c.showPage()
-	#c.save()	
-        #a=Button(text='GUARDAR')
-        #self.canvas_widget.add_widget(a)
-        #self.canvas_widget.export_to_png('a.png')
-        #get_color_from_hex('#000000'))
+        self.canvas_widget.set_color(  # Pone color inicial al trazo 
+        get_color_from_hex('#190707')) 
            
         return self.canvas_widget
 
@@ -172,14 +164,17 @@ class PizarraEIEApp(App):
 
 if __name__ == '__main__':
     
+    #Setea la variable que incrementa el numero de las imagenes
     global itername
     itername = 1
     
+    #Configura el tamano de la pantalla 
     Config.set('graphics', 'width', '1300')
     Config.set('graphics', 'height', '720')  # 16:9
-   
+
+    #Setea el color del fondo de la pizarra    
     from kivy.core.window import Window
     Window.clearcolor = get_color_from_hex('#FFFFFF') # Pone el fondo de la ventana en blanco 
    
-    
+    # Instancia Pizarra APP
     PizarraEIEApp().run()
