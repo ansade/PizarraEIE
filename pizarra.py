@@ -24,6 +24,7 @@ from kivy.uix.button import Button
 from reportlab.pdfgen import canvas
 from reportlab.lib.units import inch, cm
 import os
+import datetime
 from kivy.graphics import (
     Canvas, Translate, Fbo, ClearColor, ClearBuffers, Scale)
 
@@ -100,14 +101,15 @@ class CanvasWidget(Widget):
 	# Funcion que limpia los widgets y guarda una imagen de los apuntes
     def guardar(self):
         global itername # variable que incrementa el numero de img
+        os.system('mkdir '+'./'+str(today)+'/PICS/')
         #guarda los botones
         saved = self.children[:]
         #borra los botones 
         self.clear_widgets()
         # guarda el contenido de la pizarra (utiliza funcion exportar a PNG)
-        self.export_to_png('IMG'+str(itername)+'.png')
+        self.export_to_png('./'+str(today)+'/PICS/'+'IMG'+str(itername)+'.png')
         itername = itername + 1
-        print itername
+        #print itername
         
         #recupera los botones
         for widget in saved:
@@ -117,10 +119,19 @@ class CanvasWidget(Widget):
     
     # Funcion que toma las imagenes guardadas y las exporta a pdf
     def export(self):
-		c = canvas.Canvas('./PDFs/EJEMPLO.pdf')
-		c.drawImage('./prueba.png', 0, 0, 22*cm, 22*cm) #HAcer un for que itere sobre todas las imagenes creadas
-		c.showPage()
-		c.save() # Desplegar mensaje de creacion satisfactoria
+		content_list = []
+		os.system('mkdir '+'./'+str(today)+'/PDF/')
+		c = canvas.Canvas('./'+str(today)+'/PDF/ '+str(today)+'.pdf')
+		for content in os.listdir('./'+str(today)+'/PICS/'): # 
+			content_list.append(content)
+			#print content_list
+			
+		for elem in sorted(content_list):
+			c.drawImage('./'+str(today)+'/PICS/'+str(elem), 0, 0, 22*cm, 22*cm) #HAcer un for que itere sobre todas las imagenes creadas
+			c.showPage()
+			c.save() # Desplegar mensaje de creacion satisfactoria
+			
+		#os.system('rm ./Screencaps/*')
     
     	
 		
@@ -167,6 +178,14 @@ if __name__ == '__main__':
     #Setea la variable que incrementa el numero de las imagenes
     global itername
     itername = 1
+    
+    global today 
+    today = datetime.date.today()
+    
+    os.system ('mkdir ' +str(today))
+    
+    os.system('rm ./'+str(today)+'/PICS/*')
+    
     
     #Configura el tamano de la pantalla 
     Config.set('graphics', 'width', '1300')
